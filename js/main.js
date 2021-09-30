@@ -7,8 +7,22 @@ function getNumberOfLetter(let){
     if (currentPos - startPos <= 5) {
         return (currentPos - startPos);
     }
+    if (currentPos - startPos < 0) {
+        return false;
+    }
     return (currentPos - startPos) + 1;
-  }
+}
+
+function checkLettersOnLatin(str) {
+    for (let i = 0; i < str.length; i++) {
+        if (/[а-я]/i.test(str[i])) {
+            continue
+        } else {
+            return false;
+        }
+    }
+    return true;   
+}
 
 const arr_letters = [
     ["а",	"б",	"в",	"г",	"д",	"е",	"ё",	"ж",	"з",	"и",	"й",	"к",	"л",	"м",	"н",	"о",	"п",	"р",	"с",	"т",	"у",	"ф",	"х",	"ц",	"ч",	"ш",    "щ",    "ъ",	"ы",	"ь",	"э",	"ю",	"я"],
@@ -63,37 +77,47 @@ document.addEventListener('DOMContentLoaded', () => {
         let num = 0;
         let str = "";
 
-        if (text.length - key.length > 0) {
-            for(let i = 0; i < text.length; i++) {
-                if (num == key.length) {
-                    num = 0;
+        if (!checkLettersOnLatin(text)) {
+            alert("Введите корректный Текс, состоящий только из русского алфавита!");
+        } else if (!checkLettersOnLatin(key)) {
+            alert("Введите корректный Ключ, состоящий только из русского алфавита!");
+        } else if (text == "") {
+            alert("Заполните поле Текст");
+        } else if (key == "") {
+            alert("Заполните поле Ключ");
+        } else {
+            if (text.length - key.length > 0) {
+                for(let i = 0; i < text.length; i++) {
+                    if (num == key.length) {
+                        num = 0;
+                    }
+                    if (text[i] == ' ') {
+                        new_key += ' ';
+                        continue
+                    }
+                    new_key += key.charAt(num);
+                    num++;
                 }
-                if (text[i] == ' ') {
-                    new_key += ' ';
+            } else if (text.length - key.length < 0) {
+                for(let i = 0; i < text.length; i++) {
+                    new_key += key.charAt(i);
+                }
+            } else {
+                new_key += key;
+            }
+            
+            for (let i = 0; i < new_key.length; i++) {
+                if (new_key[i] == ' ') {
+                    str += ' ';
                     continue
                 }
-                new_key += key.charAt(num);
-                num++;
+                row = getNumberOfLetter(new_key.charAt(i));
+                col = getNumberOfLetter(text.charAt(i));
+                str += arr_letters[row][col];
             }
-        } else if (text.length - key.length < 0) {
-            for(let i = 0; i < text.length; i++) {
-                new_key += key.charAt(i);
-            }
-        } else {
-            new_key += key;
+            text_change.innerHTML = str;
         }
         
-        for (let i = 0; i < new_key.length; i++) {
-            if (new_key[i] == ' ') {
-                str += ' ';
-                continue
-            }
-            row = getNumberOfLetter(new_key.charAt(i));
-            col = getNumberOfLetter(text.charAt(i));
-            console.log(row+"_"+col+"_"+arr_letters[row][col]);
-            str += arr_letters[row][col];
-        }
-        text_change.innerHTML = str;
     })
 
     btn_decrypt.addEventListener('click', () => {
@@ -104,37 +128,48 @@ document.addEventListener('DOMContentLoaded', () => {
         let num = 0;
         let str = "";
         
-        if (text.length - key.length > 0) {
-            for(let i = 0; i < text.length; i++) {
-                if (num == key.length) {
-                    num = 0;
-                }
-                if (text[i] == ' ') {
-                    new_key += ' ';
-                    continue
-                }
-                new_key += key.charAt(num);
-                num++;
-            }
-        } else if (text.length - key.length < 0) {
-            for(let i = 0; i < text.length; i++) {
-                new_key += key.charAt(i);
-            }
+        if (!checkLettersOnLatin(text)) {
+            alert("Введите корректный Текс, состоящий только из русского алфавита!");
+        } else if (!checkLettersOnLatin(key)) {
+            alert("Введите корректный Ключ, состоящий только из русского алфавита!");
+        } else if (text == "") {
+            alert("Заполните поле Текст");
+        } else if (key == "") {
+            alert("Заполните поле Ключ");
         } else {
-            new_key += key;
-        }
-
-        for (let num=0; num < new_key.length;num++) {
-            for (let i =0; i < arr_letters.length; i++) {
-                if (new_key[num] == ' ') {
-                    str += " ";
-                    continue
+            if (text.length - key.length > 0) {
+                for(let i = 0; i < text.length; i++) {
+                    if (num == key.length) {
+                        num = 0;
+                    }
+                    if (text[i] == ' ') {
+                        new_key += ' ';
+                        continue
+                    }
+                    new_key += key.charAt(num);
+                    num++;
                 }
-                if (arr_letters[getNumberOfLetter(new_key.charAt(num))][i] == text.charAt(num)) {
-                    str += arr_letters[0][i];
+            } else if (text.length - key.length < 0) {
+                for(let i = 0; i < text.length; i++) {
+                    new_key += key.charAt(i);
+                }
+            } else {
+                new_key += key;
+            }
+    
+            for (let num=0; num < new_key.length;num++) {
+                for (let i =0; i < arr_letters.length; i++) {
+                    if (new_key[num] == ' ') {
+                        str += " ";
+                        continue
+                    }
+                    if (arr_letters[getNumberOfLetter(new_key.charAt(num))][i] == text.charAt(num)) {
+                        str += arr_letters[0][i];
+                    }
                 }
             }
+            text_change.innerHTML = str;
         }
-        text_change.innerHTML = str;
+        
     })
 })
