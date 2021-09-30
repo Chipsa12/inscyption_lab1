@@ -37,8 +37,12 @@ main {
     margin-top: 30px;
 }
 
+.input-key {
+    margin-left: 5px;
+}
+
 .text-key {
-    margin: 20px 20px;
+    padding: 20px 20px;
     width: 200px;
     border: none;
 }
